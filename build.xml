@@ -1,0 +1,62 @@
+<project default="dist" name="rebate">
+    <property name="target" location="target"/>
+    <property name="build" location="${target}/bin"/>
+    <property name="lib" location="lib"/>
+    <property name="source" location="src/"/>
+    <property name="main-class" value="edu.mu.vimanlab.chemodanov.rebate.main.Main"/>
+    <property name="rebate-jar" location="${target}/rebate.jar"/>
+    <property name="cplex_path" location="/Users/dmitriichemodanov/Applications/IBM/ILOG/CPLEX_Studio127/cplex/bin/x86-64_osx"/>
+
+    <patternset id="lib">
+        <include name="apfloat.jar"/>
+        <include name="commons-lang3-3.3.2.jar"/>
+        <include name="commons-math3-3.6.1.jar"/>
+        <include name="cplex.jar"/>
+    </patternset>
+    
+    <path id="classpath">
+        <fileset dir="${lib}">
+            <patternset refid="lib"/>
+        </fileset>
+    </path>  
+        
+    <target name="clean">
+        <delete dir="${target}"/>
+    </target>    
+    
+    <target name="init">
+        <mkdir dir="${build}"/>
+        <mkdir dir="${target}/lib"/>
+    </target>
+
+    <target name="compile" depends="init">
+        <javac includeAntRuntime="false" 
+           classpathref="classpath" 
+           debug="true" 
+           srcdir="${source}"
+           destdir="${build}">
+        </javac>
+    </target>    
+
+    <target name="run" depends="dist">
+        <java fork="true" jar="${rebate-jar}" classpathref="classpath">
+            <sysproperty key="java.library.path" path="${cplex_path}"/>
+            <arg value="${experiment}"/>
+            <jvmarg value="-Xms1024M"/>
+        </java>
+    </target>
+    
+    <target name="dist" depends="compile">
+        <jar destfile="${rebate-jar}" filesetmanifest="mergewithoutmain">
+            <manifest>
+                <attribute name="Main-Class" value="${main-class}"/>
+                <attribute name="Class-Path" value="."/>
+            </manifest>
+            <fileset dir="${build}"/>
+            <zipgroupfileset dir="${lib}" excludes="META-INF/*.SF">
+                <patternset refid="lib"/>
+            </zipgroupfileset>
+        </jar>
+    </target>
+
+</project>

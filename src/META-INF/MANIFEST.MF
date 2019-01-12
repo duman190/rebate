@@ -1,0 +1,2 @@
+Manifest-Version: 1.0
+Main-Class: edu.mu.vimanlab.chemodanov.rebate.main.Main
