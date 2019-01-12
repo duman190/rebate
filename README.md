@@ -44,7 +44,7 @@ The distribution tree contains:
 * src/      (java source files)
         
         ```
-        edu/um/chemodanov/agra/Main (java sim main file)
+        edu/mu/vimanlab/chemodanov/rebate/main/Main (java sim main file)
         ```
         
 
